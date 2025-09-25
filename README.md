@@ -50,22 +50,16 @@ sklearn to demonstrate Information Retrieval using the Vector Space Model.
 
 ### Calculate cosine similarity between query and documents
     def search(query, tfidf_matrix, tfidf_vectorizer):
-        query_processed = preprocess_text(query)
-        query_vector = tfidf_vectorizer.transform([query_processed])
+        preprocessed_query = preprocess_text(query)
+        query_vector = tfidf_vectorizer.transform([preprocessed_query])
     
-        cosine_similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
+        similarity_scores = cosine_similarity(query_vector, tfidf_matrix)
     
-        doc_ids = list(documents.keys())
-        search_results = []
-        for i, score in enumerate(cosine_similarities):
-            if score > 0:
-                doc_id = doc_ids[i]
-                original_doc = documents[doc_id]
-                search_results.append((doc_id, original_doc, score))
+        sorted_indexes = similarity_scores.argsort()[0][::-1]
     
-        search_results.sort(key=lambda x: x[2], reverse=True)
-    
-        return search_results
+        results = [(documents[i], similarity_scores[0, i]) for i in sorted_indexes]
+        return results
+
         
 ### Get input from user
     query = input("Enter your query: ")
@@ -87,7 +81,8 @@ sklearn to demonstrate Information Retrieval using the Vector Space Model.
     print("The highest rank cosine score is:", highest_rank_score)
 
 ## Output:
-<img width="800" height="455" alt="Untitled" src="https://github.com/user-attachments/assets/8e713fda-7477-4761-81bd-1245c3d065e0" />
+<img width="418" height="426" alt="image" src="https://github.com/user-attachments/assets/bfc964f2-bd0a-4af7-9546-7b556fd69c59" />
+
 
 ## Result:
 Hence, Successfully implemented Information Retrieval Using Vector Space Model in Python.
