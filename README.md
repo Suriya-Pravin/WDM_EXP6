@@ -1,20 +1,19 @@
-### EX6 Information Retrieval Using Vector Space Model in Python
-### DATE: 
-### AIM: To implement Information Retrieval Using Vector Space Model in Python.
-### Description: 
+# Ex:6 Information Retrieval Using Vector Space Model in Python
+## AIM: To implement Information Retrieval Using Vector Space Model in Python.
+## Description: 
 <div align = "justify">
 Implementing Information Retrieval using the Vector Space Model in Python involves several steps, including preprocessing text data, constructing a term-document matrix, 
 calculating TF-IDF scores, and performing similarity calculations between queries and documents. Below is a basic example using Python and libraries like nltk and 
 sklearn to demonstrate Information Retrieval using the Vector Space Model.
 
-### Procedure:
+## Procedure:
 1. Define sample documents.
 2. Preprocess text data by tokenizing, removing stopwords, and punctuation.
 3. Construct a TF-IDF matrix using TfidfVectorizer from sklearn.
 4. Define a search function that calculates cosine similarity between a query and documents based on the TF-IDF matrix.
 5. Execute a sample query and display the search results along with similarity scores.
 
-### Program:
+## Program:
 
     import requests
     from bs4 import BeautifulSoup
@@ -28,7 +27,7 @@ sklearn to demonstrate Information Retrieval using the Vector Space Model.
     nltk.download('punkt')
     nltk.download('stopwords')
 
-###### Sample documents stored in a dictionary
+### Sample documents stored in a dictionary
     documents = {
         "doc1": "This is the first document.",
         "doc2": "This document is the second document.",
@@ -36,30 +35,45 @@ sklearn to demonstrate Information Retrieval using the Vector Space Model.
         "doc4": "Is this the first document?",
     }
 
-###### Preprocessing function to tokenize and remove stopwords/punctuation
+### Preprocessing function to tokenize and remove stopwords/punctuation
     def preprocess_text(text):
         tokens = word_tokenize(text.lower())
         tokens = [token for token in tokens if token not in stopwords.words("english") and token not in               string.punctuation]
         return " ".join(tokens)
 
-###### Preprocess documents and store them in a dictionary
+### Preprocess documents and store them in a dictionary
     preprocessed_docs = {doc_id: preprocess_text(doc) for doc_id, doc in documents.items()}
 
-###### Construct TF-IDF matrix
+### Construct TF-IDF matrix
     tfidf_vectorizer = TfidfVectorizer()
     tfidf_matrix = tfidf_vectorizer.fit_transform(preprocessed_docs.values())
 
-###### Calculate cosine similarity between query and documents
+### Calculate cosine similarity between query and documents
     def search(query, tfidf_matrix, tfidf_vectorizer):
-        //TYPE YOUR CODE HERE
-
-###### Get input from user
+        query_processed = preprocess_text(query)
+        query_vector = tfidf_vectorizer.transform([query_processed])
+    
+        cosine_similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
+    
+        doc_ids = list(documents.keys())
+        search_results = []
+        for i, score in enumerate(cosine_similarities):
+            if score > 0:
+                doc_id = doc_ids[i]
+                original_doc = documents[doc_id]
+                search_results.append((doc_id, original_doc, score))
+    
+        search_results.sort(key=lambda x: x[2], reverse=True)
+    
+        return search_results
+        
+### Get input from user
     query = input("Enter your query: ")
 
-###### Perform search
+### Perform search
     search_results = search(query, tfidf_matrix, tfidf_vectorizer)
 
-###### Display search results
+### Display search results
     print("Query:", query)
     for i, result in enumerate(search_results, start=1):
         print(f"\nRank: {i}")
@@ -68,10 +82,12 @@ sklearn to demonstrate Information Retrieval using the Vector Space Model.
         print("Similarity Score:", result[2])
         print("----------------------")
 
-###### Get the highest rank cosine score
+### Get the highest rank cosine score
     highest_rank_score = max(result[2] for result in search_results)
     print("The highest rank cosine score is:", highest_rank_score)
 
-### Output:
+## Output:
+<img width="800" height="455" alt="Untitled" src="https://github.com/user-attachments/assets/8e713fda-7477-4761-81bd-1245c3d065e0" />
 
-### Result:
+## Result:
+Hence, Successfully implemented Information Retrieval Using Vector Space Model in Python.
